@@ -11,7 +11,7 @@ holding the images
 def get_images(image_directory):
     X = []
     y = []
-    extensions = ('jpg','png','gif')
+    extensions = ('.jpg','.png','.gif')
     
     '''
     Each subject has their own folder with their

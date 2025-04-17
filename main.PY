@@ -5,7 +5,7 @@ import warnings
 warnings.warn = warn
 import get_images
 import get_landmarks
-#import performance_plots
+import performance_plots
 from sklearn.multiclass import OneVsRestClassifier as ORC
 from sklearn.model_selection import train_test_split
 import pandas as pd # type: ignore
@@ -13,7 +13,7 @@ from sklearn.neighbors import KNeighborsClassifier as knn
 from sklearn.svm import SVC as svm
 
 
-image_directory = 'C:/Users/david/Documents/USF/USF/Classes/Spring_25/Biometrics/Proj/biometrics_proj/faces'
+image_directory = 'C:/Users/david/Documents/USF/USF/Classes/Spring_25/Biometrics/Proj/biometrics_proj/faces/wiki_crop'
 X, y = get_images.get_images(image_directory)
 print(f"Loaded X shape: {len(X)}, Loaded y shape: {len(y)}")
 
