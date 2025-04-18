@@ -82,9 +82,6 @@ def get_landmarks(images, labels, save_directory="", num_coords=5, to_save=False
                 plt.close()
                 
             if img_ct % 50 == 0:
-                print("%d images with facial landmarks completed." % img_ct)
+                print(f"{img_ct} images with facial landmarks completed.")
                 
     return np.array(landmarks), np.array(new_labels)
-            
-            
-        

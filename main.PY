@@ -121,3 +121,6 @@ for i in range(len(imp_scores_knn)):
 
 all_authentications = len(gen_scores_knn) + len(imp_scores_knn)
 accuracy = correct_authentications / all_authentications
+
+print("")
+print(f'Accuracy: {accuracy}')
