@@ -40,10 +40,12 @@ def get_landmarks(images, labels, save_directory="", num_coords=5, to_save=False
     new_labels = []
     img_ct = 0
     
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     if num_coords == 5:
-        predictor_path = 'shape_predictor_5_face_landmarks.dat'
+      predictor_path = os.path.join(script_dir, 'shape_predictor_5_face_landmarks.dat')
     else:
-        predictor_path = 'shape_predictor_68_face_landmarks.dat'
+      predictor_path = os.path.join(script_dir, 'shape_predictor_68_face_landmarks.dat')
+
 
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(predictor_path)

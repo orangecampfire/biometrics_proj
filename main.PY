@@ -13,7 +13,7 @@ from sklearn.neighbors import KNeighborsClassifier as knn
 from sklearn.svm import SVC as svm
 
 
-image_directory = 'C:/Users/david/Documents/USF/USF/Classes/Spring_25/Biometrics/Proj/biometrics_proj/faces/wiki_crop'
+image_directory = 'C:/Users/david/Documents/USF/USF/Classes/Spring_25/Biometrics/Proj/biometrics_proj/caltech'
 X, y = get_images.get_images(image_directory)
 print(f"Loaded X shape: {len(X)}, Loaded y shape: {len(y)}")
 
