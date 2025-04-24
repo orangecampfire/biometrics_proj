@@ -131,6 +131,17 @@ accuracy = correct_authentications / all_authentications
 print("")
 print(f'Accuracy: {accuracy}')
 
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.metrics.pairwise import euclidean_distances
+import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve, auc
+from sklearn.preprocessing import LabelEncoder
+from scipy.stats import norm
+
+
 # 1️ Feature Extraction Function
 def extract_features(data):
     num_samples = data.shape[0]
