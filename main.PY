@@ -13,10 +13,9 @@ from sklearn.neighbors import KNeighborsClassifier as knn
 from sklearn.svm import SVC as svm
 
 
-image_directory = 'C:/Users/david/Documents/USF/USF/Classes/Spring_25/Biometrics/Proj/biometrics_proj/caltech'
+image_directory = 'C:/Users/david/Documents/USF/USF/Classes/Spring_25/Biometrics/Proj/caltech_brighter'
 X, y = get_images.get_images(image_directory)
 print(f"Loaded X shape: {len(X)}, Loaded y shape: {len(y)}")
-
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.33, random_state=42)
@@ -69,7 +68,7 @@ clf = ORC(svm(probability=True))
 clf.fit(X_train, y_train)
 matching_scores_svm = clf.predict_proba(X_val)
 
-# Tuning the sytem
+# Tuning the system
 gen_scores = []
 imp_scores = []
 classes = clf.classes_
@@ -121,6 +120,3 @@ for i in range(len(imp_scores_knn)):
 
 all_authentications = len(gen_scores_knn) + len(imp_scores_knn)
 accuracy = correct_authentications / all_authentications
-
-print("")
-print(f'Accuracy: {accuracy}')

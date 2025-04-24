@@ -11,10 +11,11 @@ from sklearn.model_selection import train_test_split
 import pandas as pd # type: ignore
 from sklearn.neighbors import KNeighborsClassifier as knn
 from sklearn.svm import SVC as svm
+from sklearn.ensemble import RandomForestClassifier as rf
 
 
 
-image_directory = 'C:/Users/david/Documents/USF/USF/Classes/Spring_25/Biometrics/Proj/caltech_brighter'
+image_directory = 'caltech_brighter'
 X, y = get_images.get_images(image_directory)
 print(f"Loaded X shape: {len(X)}, Loaded y shape: {len(y)}")
 
@@ -83,6 +84,46 @@ for i in range(len(y_val)):
     
 threshold_svm = performance_plots.performance(gen_scores, imp_scores, 'SVM_decision_fusion', 100)
 
+
+
+'''
+-----------------------------------------------------------------
+'''
+
+
+
+''' Matching and Decision - Classifier 3 '''
+clf = ORC(rf(n_estimators=100, random_state=42))
+clf.fit(X_train, y_train)
+matching_scores_rf = clf.predict_proba(X_val)
+
+# Tuning the system
+gen_scores = []
+imp_scores = []
+classes = clf.classes_
+matching_scores_rf = pd.DataFrame(matching_scores_rf, columns=classes)
+
+for i in range(len(y_val)):    
+    scores = matching_scores_rf.loc[i]
+    mask = scores.index.isin([y_val[i]])
+    gen_scores.extend(scores[mask])
+    imp_scores.extend(scores[~mask])
+
+threshold_rf = performance_plots.performance(gen_scores, imp_scores, 'RF_decision_fusion', 100)
+
+# Testing the system - getting a decision
+matching_scores_rf = clf.predict_proba(X_test)
+matching_scores_rf = pd.DataFrame(matching_scores_rf, columns=classes)
+
+gen_scores_rf = []
+imp_scores_rf = []
+for i in range(len(y_test)):    
+    scores = matching_scores_rf.loc[i]
+    mask = scores.index.isin([y_test[i]])
+    gen_scores_rf.extend(scores[mask])
+    imp_scores_rf.extend(scores[~mask])
+
+
 # Testing the system - getting a decision
 matching_scores_svm = clf.predict_proba(X_test)
 matching_scores_svm = pd.DataFrame(matching_scores_svm, columns=classes)
@@ -100,24 +141,23 @@ Fuse decisions
 '''
 correct_authentications = 0
 for i in range(len(gen_scores_knn)):
-    decision_knn = False
-    decision_svm = False
-    if gen_scores_knn[i] >= threshold_knn:
-        decision_knn = True
-        if gen_scores_svm[i] >= threshold_svm:
-            decision_svm = True
-            if decision_knn and decision_svm:
-                correct_authentications += 1
-                
+    d1 = gen_scores_knn[i] >= threshold_knn
+    d2 = gen_scores_svm[i] >= threshold_svm
+    d3 = gen_scores_rf[i] >= threshold_rf
+    
+    if d1 and d2 and d3:
+        correct_authentications += 1
+
 for i in range(len(imp_scores_knn)):
-    decision_knn = False
-    decision_svm = False
-    if imp_scores_knn[i] < threshold_knn:
-        decision_knn = True
-        if imp_scores_svm[i] < threshold_svm:
-            decision_svm = True
-            if decision_knn and decision_svm:
-                correct_authentications += 1
+    d1 = imp_scores_knn[i] < threshold_knn
+    d2 = imp_scores_svm[i] < threshold_svm
+    d3 = imp_scores_rf[i] < threshold_rf
+
+    if d1 and d2 and d3:
+        correct_authentications += 1
+
 
 all_authentications = len(gen_scores_knn) + len(imp_scores_knn)
 accuracy = correct_authentications / all_authentications
+
+print(f"All Authentications: {all_authentications}\nAccuracy: {accuracy}")
