@@ -14,7 +14,7 @@ from sklearn.svm import SVC as svm
 from sklearn.ensemble import RandomForestClassifier as rf
 
 
-image_directory = 'caltech'
+image_directory = 'caltech_old'
 X, y = get_images.get_images(image_directory)
 print(f"Loaded X shape: {len(X)}, Loaded y shape: {len(y)}")
 
