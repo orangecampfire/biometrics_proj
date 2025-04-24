@@ -1,3 +1,4 @@
+import matplotlib.pyplot
 import numpy as np
 
 import matplotlib
@@ -14,7 +15,7 @@ def get_dprime(genuine_scores, impostor_scores):
         y = np.sqrt(0.5 * (np.var(genuine_scores) + np.var(impostor_scores)))
         return x / (y + epsilon)
 
-def plot_det_curve(FPR, FNR): 
+def plot_det_curve(FPR, FNR, plot_title): 
         plt.figure()
         plt.plot(FPR, FNR, lw=2, color='green', label='DET Curve')
         plt.xlim([-0.05, 1.05])
@@ -27,11 +28,11 @@ def plot_det_curve(FPR, FNR):
         plt.title('Detection Error Tradeoff Curve', fontsize=12, weight=5)
         plt.xticks(fontsize = 10)
         plt.yticks(fontsize = 10)
-        plt.savefig("det_curve.png", dpi=300, bbox_inches="tight")
+        plt.savefig(f"plots/det_curve.{plot_title}.png", dpi=300, bbox_inches="tight")
         plt.show()
         plt.close()
 
-def plot_roc_curve(FPR, TPR):
+def plot_roc_curve(FPR, TPR, plot_title):
         plt.figure()
         plt.plot(FPR, TPR, lw=2, color='green', label='ROC Curve')
         plt.xlim([-0.05, 1.05])
@@ -44,7 +45,7 @@ def plot_roc_curve(FPR, TPR):
         plt.title(f"Receiver Operating Characteristic", fontsize = 12, weight = 5)
         plt.xticks(fontsize=10)
         plt.yticks(fontsize=10)
-        plt.savefig("roc_curve_.png", dpi=300, bbox_inches="tight")
+        plt.savefig(f"plots/roc_curve_{plot_title}.png", dpi=300, bbox_inches="tight")
         plt.show()
         plt.close()
 
@@ -104,7 +105,7 @@ def plot_scoreDist(gen_scores, imp_scores, far, frr, eer_index, optimal_threshol
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     plt.title('Score Distribution Plot\nSystem %s' % (plot_title), fontsize = 15, weight = 'bold')
-    plt.savefig('Score_Dist_Plot.png',dpi=300, bbox_inches="tight")
+    plt.savefig(f'plots/Score_Dist{plot_title}.png',dpi=300, bbox_inches="tight")
     plt.show()
     plt.close()
     return
@@ -114,8 +115,8 @@ def performance(gen_scores, imp_scores, plot_title, num_thresholds):
         far, frr, tar = compute_rates(gen_scores, imp_scores, thresholds)    
         eer, eer_index, optimal_threshold = get_eer(far, frr, thresholds)
         plot_scoreDist(gen_scores, imp_scores, far, frr, eer_index, optimal_threshold, plot_title)
-        plot_roc_curve(far, tar)
-        plot_det_curve(far, frr)
+        plot_roc_curve(far, tar, plot_title)
+        plot_det_curve(far, frr, plot_title)
         get_dprime(gen_scores, imp_scores)
         print(optimal_threshold)
         return optimal_threshold
