@@ -10,14 +10,7 @@ from sklearn.multiclass import OneVsRestClassifier as ORC
 from sklearn.model_selection import train_test_split
 import pandas as pd # type: ignore
 from sklearn.neighbors import KNeighborsClassifier as knn
-from sklearn.multiclass import OneVsRestClassifier
 from sklearn.svm import SVC as svm
-from sklearn.metrics import roc_curve, auc
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.metrics.pairwise import euclidean_distances
-from sklearn.preprocessing import LabelEncoder
-from scipy.stats import norm
 
 
 
