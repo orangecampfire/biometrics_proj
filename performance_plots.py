@@ -8,6 +8,45 @@ from sklearn import metrics
 
 
 ############# functions ##########################################################
+def get_dprime(genuine_scores, impostor_scores):
+        epsilon = 0.0000001
+        x = np.mean(genuine_scores) - np.mean(impostor_scores)
+        y = np.sqrt(0.5 * (np.var(genuine_scores) + np.var(impostor_scores)))
+        return x / (y + epsilon)
+
+def plot_det_curve(FPR, FNR): 
+        plt.figure()
+        plt.plot(FPR, FNR, lw=2, color='green', label='DET Curve')
+        plt.xlim([-0.05, 1.05])
+        plt.ylim([-0.05, 1.05])
+        plt.grid(color='k')
+        plt.gca().spines['top'].set_visible(False)
+        plt.gca().spines['right'].set_visible(False)
+        plt.xlabel("False Pos. Rate", fontsize = 12)    
+        plt.ylabel("False Neg. Rate", fontsize = 12)
+        plt.title('Detection Error Tradeoff Curve', fontsize=12, weight=5)
+        plt.xticks(fontsize = 10)
+        plt.yticks(fontsize = 10)
+        plt.savefig("det_curve.png", dpi=300, bbox_inches="tight")
+        plt.show()
+        plt.close()
+
+def plot_roc_curve(FPR, TPR):
+        plt.figure()
+        plt.plot(FPR, TPR, lw=2, color='green', label='ROC Curve')
+        plt.xlim([-0.05, 1.05])
+        plt.ylim([-0.05, 1.05])
+        plt.grid(color='k')
+        plt.gca().spines['top'].set_visible(False)
+        plt.gca().spines['right'].set_visible(False)
+        plt.ylabel("True Pos. Rate", fontsize = 12)
+        plt.xlabel("False Pos. Rate", fontsize = 12)
+        plt.title(f"Receiver Operating Characteristic", fontsize = 12, weight = 5)
+        plt.xticks(fontsize=10)
+        plt.yticks(fontsize=10)
+        plt.savefig("roc_curve_.png", dpi=300, bbox_inches="tight")
+        plt.show()
+        plt.close()
 
 def get_eer(far, frr, thresholds):
     distances = []
@@ -65,6 +104,8 @@ def plot_scoreDist(gen_scores, imp_scores, far, frr, eer_index, optimal_threshol
     plt.xticks(fontsize=12)
     plt.yticks(fontsize=12)
     plt.title('Score Distribution Plot\nSystem %s' % (plot_title), fontsize = 15, weight = 'bold')
+    plt.savefig('Score_Dist_Plot.png',dpi=300, bbox_inches="tight")
+    plt.show()
     plt.close()
     return
 
@@ -73,5 +114,8 @@ def performance(gen_scores, imp_scores, plot_title, num_thresholds):
         far, frr, tar = compute_rates(gen_scores, imp_scores, thresholds)    
         eer, eer_index, optimal_threshold = get_eer(far, frr, thresholds)
         plot_scoreDist(gen_scores, imp_scores, far, frr, eer_index, optimal_threshold, plot_title)
+        plot_roc_curve(far, tar)
+        plot_det_curve(far, frr)
+        get_dprime(gen_scores, imp_scores)
         print(optimal_threshold)
         return optimal_threshold
