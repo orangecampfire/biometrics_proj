@@ -20,7 +20,7 @@ def get_images(image_directory):
     '''
     subfolders = os.listdir(image_directory)
     for subfolder in subfolders:
-        print("Loading images in %s" % subfolder)
+        #print("Loading images in %s" % subfolder)
         if os.path.isdir(os.path.join(image_directory, subfolder)): # only load directories
             subfolder_files = os.listdir(
                     os.path.join(image_directory, subfolder)
