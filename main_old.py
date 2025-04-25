@@ -35,9 +35,14 @@ clf.fit(X_train, y_train)
 matching_scores_knn = clf.predict_proba(X_val)
 
 # Tuning the sytem
+epsilon = 1e-8
 gen_scores = []
 imp_scores = []
 classes = clf.classes_
+print("matching_scores_knn:\n", matching_scores_knn)
+print("Shape:", matching_scores_knn.shape)
+
+matching_scores_knn = matching_scores_knn[:, 0].reshape(-1, 1) + epsilon
 matching_scores_knn = pd.DataFrame(matching_scores_knn, columns=classes)
 
 for i in range(len(y_val)):    
@@ -50,6 +55,7 @@ threshold_knn = performance_plots.performance(gen_scores, imp_scores, 'kNN_decis
 
 # Testing the system - getting a decision
 matching_scores_knn = clf.predict_proba(X_test)
+matching_scores_knn = matching_scores_knn[:, 0].reshape(-1, 1) + epsilon
 matching_scores_knn = pd.DataFrame(matching_scores_knn, columns=classes)
 
 gen_scores_knn = []
@@ -73,6 +79,7 @@ matching_scores_svm = clf.predict_proba(X_val)
 gen_scores = []
 imp_scores = []
 classes = clf.classes_
+matching_scores_svm = matching_scores_svm[:, 0].reshape(-1, 1) + epsilon
 matching_scores_svm = pd.DataFrame(matching_scores_svm, columns=classes)
 
 for i in range(len(y_val)):    
@@ -100,6 +107,7 @@ matching_scores_rf = clf.predict_proba(X_val)
 gen_scores = []
 imp_scores = []
 classes = clf.classes_
+matching_scores_rf = matching_scores_rf[:, 0].reshape(-1, 1) + epsilon
 matching_scores_rf = pd.DataFrame(matching_scores_rf, columns=classes)
 
 for i in range(len(y_val)):    

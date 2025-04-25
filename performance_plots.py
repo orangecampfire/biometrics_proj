@@ -81,9 +81,20 @@ def compute_rates(gen_scores, imp_scores, thresholds):
             else:
                 tn += 1
                     
-        far.append(fp / (fp + tn))
-        frr.append(fn / (fn + tp))
-        tar.append(tp / (tp + fn))
+        if (fp + tn) > 0:
+            far.append(fp / (fp + tn))
+        else:
+            far.append(0)
+
+        if (fn + tp) > 0:
+            frr.append(fn / (fn + tp))
+        else:
+            frr.append(0)
+
+        if (tp + fn) > 0:
+            tar.append(tp / (tp + fn))
+        else:
+            tar.append(0)
         
     return far, frr, tar
 
