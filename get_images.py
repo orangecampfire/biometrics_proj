@@ -40,7 +40,7 @@ def get_images(image_directory):
                     X.append(img)
                     # add the image's label to a list y
                     y.append(subfolder)
-    
+
     print("All images are loaded")     
     # return the images and their labels      
     return X, y

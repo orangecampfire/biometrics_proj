@@ -100,12 +100,17 @@ def compute_rates(gen_scores, imp_scores, thresholds):
 
 
 def plot_scoreDist(gen_scores, imp_scores, far, frr, eer_index, optimal_threshold, plot_title):
+    dprime = get_dprime(gen_scores, imp_scores)
     plt.figure()
     plt.hist(gen_scores, color='green', bins=50, density=True, lw=2, histtype='step', hatch='//', label='Genuine Scores')
     plt.hist(imp_scores, color='red', bins=50, density=True, lw=2, histtype='step', hatch='\\', label='Impostor Scores')
     plt.plot([optimal_threshold,optimal_threshold], [0, 10], '--', color="black", lw=2)
     ymax = plt.gca().get_ylim()[1]
-    plt.text(optimal_threshold+0.4, ymax * 0.8, f"Score threshold, t={optimal_threshold:.2f}, at EER\nFPR={far[eer_index]:.2f}, FNR={frr[eer_index]:.2f}", style='italic', fontsize=12, bbox={'facecolor': 'grey', 'alpha': 0.5, 'pad': 10}); plt.xlim([-0.05,1.05])
+    # plt.text(optimal_threshold+0.4, ymax * 0.8, f"Score threshold, t={optimal_threshold:.2f}, at EER\nFPR={far[eer_index]:.2f}, FNR={frr[eer_index]:.2f}", style='italic', fontsize=12, bbox={'facecolor': 'grey', 'alpha': 0.5, 'pad': 10}); plt.xlim([-0.05,1.05])
+    plt.text(optimal_threshold+0.05, 10, 
+    "Score threshold, t=%.2f, at EER\nFPR=%.2f, FNR=%.2f\ndprime=%.2f" 
+    % (optimal_threshold, far[eer_index], frr[eer_index], dprime), 
+    style='italic', fontsize=12, bbox={'facecolor': 'grey', 'alpha': 0.5, 'pad': 10})
     plt.grid(color = 'gray', linestyle = '--', linewidth = 0.5)
     plt.legend(loc='upper left', fontsize=12)
     plt.xlabel('Matching Score', fontsize = 15, weight = 'bold')
@@ -128,5 +133,5 @@ def performance(gen_scores, imp_scores, plot_title, num_thresholds):
         plot_roc_curve(far, tar, plot_title)
         plot_det_curve(far, frr, plot_title)
         get_dprime(gen_scores, imp_scores)
-        print(optimal_threshold)
+        #print(optimal_threshold)
         return optimal_threshold
