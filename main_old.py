@@ -16,7 +16,6 @@ from sklearn.ensemble import RandomForestClassifier as rf
 
 image_directory = 'caltech_old'
 X, y = get_images.get_images(image_directory)
-print(f"Loaded X shape: {len(X)}, Loaded y shape: {len(y)}")
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.33, random_state=42)
@@ -39,10 +38,6 @@ epsilon = 1e-8
 gen_scores = []
 imp_scores = []
 classes = clf.classes_
-print("matching_scores_knn:\n", matching_scores_knn)
-print("Shape:", matching_scores_knn.shape)
-
-matching_scores_knn = matching_scores_knn[:, 0].reshape(-1, 1) + epsilon
 matching_scores_knn = pd.DataFrame(matching_scores_knn, columns=classes)
 
 for i in range(len(y_val)):    
@@ -53,9 +48,8 @@ for i in range(len(y_val)):
     
 threshold_knn = performance_plots.performance(gen_scores, imp_scores, 'kNN_decision_fusion', 100)
 
-# Testing the system - getting a decision
+
 matching_scores_knn = clf.predict_proba(X_test)
-matching_scores_knn = matching_scores_knn[:, 0].reshape(-1, 1) + epsilon
 matching_scores_knn = pd.DataFrame(matching_scores_knn, columns=classes)
 
 gen_scores_knn = []
@@ -79,7 +73,6 @@ matching_scores_svm = clf.predict_proba(X_val)
 gen_scores = []
 imp_scores = []
 classes = clf.classes_
-matching_scores_svm = matching_scores_svm[:, 0].reshape(-1, 1) + epsilon
 matching_scores_svm = pd.DataFrame(matching_scores_svm, columns=classes)
 
 for i in range(len(y_val)):    
@@ -107,7 +100,6 @@ matching_scores_rf = clf.predict_proba(X_val)
 gen_scores = []
 imp_scores = []
 classes = clf.classes_
-matching_scores_rf = matching_scores_rf[:, 0].reshape(-1, 1) + epsilon
 matching_scores_rf = pd.DataFrame(matching_scores_rf, columns=classes)
 
 for i in range(len(y_val)):    

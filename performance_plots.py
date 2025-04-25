@@ -80,7 +80,7 @@ def compute_rates(gen_scores, imp_scores, thresholds):
                 fp += 1
             else:
                 tn += 1
-                    
+        # just in case of division by 0 
         if (fp + tn) > 0:
             far.append(fp / (fp + tn))
         else:
